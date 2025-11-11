@@ -48,8 +48,8 @@ export function TodoApp() {
     <div className="min-h-screen flex flex-col">
       <div className="max-w-4xl mx-auto w-full px-4 flex-1 flex flex-col">
         {/* Header - stays at top */}
-        <header className="flex-shrink-0 py-6">
-          <h1 className="text-3xl font-bold text-gray-900 dtext-white mb-6 text-center">
+        <header className="flex-shrink-0 pt-12 py-6">
+          <h1 className="text-3xl font-bold text-gray-900 dtext-white mb-6">
             To Do List
           </h1>
 
@@ -63,23 +63,13 @@ export function TodoApp() {
         {/* Todo List - fills remaining space */}
         <main className="flex-1 overflow-y-auto">
           <div className="space-y-2">
-            {filteredTodos.length === 0 ? (
-              <div className="text-center py-12 text-gray-500 dtext-gray-400">
-                <p className="text-lg">No todos for this date!</p>
-                <p>Add your first todo above to get started.</p>
-                {total > 0 && (
-                  <p className="text-sm mt-2">
-                    You have {total} total todos across all dates.
-                  </p>
-                )}
-              </div>
-            ) : (
+            {filteredTodos.length !== 0 &&
               filteredTodos.map((todo) => (
                 <div
                   key={todo.id}
-                  className={`flex items-center text-[#121212] gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center text-[#121212] gap-3 px-3 py-2 rounded-xl transition-colors ${
                     todo.completed
-                      ? "bg-green-50 dbg-green-900/20 "
+                      ? "bg-gray-100 border border-primary-navy/20 text-gray-400 opacity-60 cursor-not-allowed pointer-events-none"
                       : "bg-[#F3EFEE] dbg-gray-700 border-gray-200"
                   }`}
                 >
@@ -109,7 +99,7 @@ export function TodoApp() {
                   <span
                     className={`flex-1 ${
                       todo.completed
-                        ? "line-through text-gray-500"
+                        ? " text-gray-500"
                         : "text-gray-900 dtext-white"
                     }`}
                   >
@@ -118,7 +108,7 @@ export function TodoApp() {
 
                   <button
                     // onClick={() => deleteTodo(todo.id)}
-                    className="p-1 text-[#d9d9d9] flex hover:bg-red-50 dhover:bg-red-900/20 rounded transition-colors"
+                    className="p-1 text-[#d9d9d9] flex rounded transition-colors"
                     title="Menu"
                   >
                     <svg
@@ -142,8 +132,7 @@ export function TodoApp() {
                     </svg>
                   </button>
                 </div>
-              ))
-            )}
+              ))}
           </div>
         </main>
 
@@ -157,11 +146,11 @@ export function TodoApp() {
                 value={newTodo}
                 onChange={(e) => setNewTodo(e.target.value)}
                 placeholder="Write a task..."
-                className="flex-1 px-4 py-3 bg-[#F3EFEE] rounded-lg focus:outline-none focus:ring-0 focus:ring-none text-[#222]"
+                className="flex-1 px-4 py-3 bg-[#F3EFEE] rounded-xl focus:outline-none focus:ring-0 focus:ring-none text-[#222]"
               />
               <button
                 type="submit"
-                className="px-6 py-2 cursor-pointer bg-primary-navy text-white rounded-lg font-medium transition-colors"
+                className="px-6 py-2 cursor-pointer bg-primary-navy text-white rounded-xl font-medium transition-colors"
               >
                 Add
               </button>
