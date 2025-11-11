@@ -6,6 +6,7 @@ interface Todo {
   completed: boolean;
   createdAt: string; // JSON serialized Date
   date: string; // YYYY-MM-DD format
+  order: number; // For drag and drop ordering
 }
 
 const STORAGE_KEY = "date-based-todos";
@@ -20,12 +21,15 @@ export function useLocalStorageTodos() {
           const parsed = JSON.parse(saved);
           // Validate the data structure
           if (Array.isArray(parsed)) {
-            return parsed.map((todo) => ({
+            const todosWithOrder = parsed.map((todo, index) => ({
               ...todo,
               // Ensure date strings are properly formatted
               date: todo.date || new Date().toISOString().split("T")[0],
               createdAt: todo.createdAt || new Date().toISOString(),
+              // Initialize order if it doesn't exist
+              order: todo.order !== undefined ? todo.order : index,
             }));
+            return todosWithOrder;
           }
         }
       } catch (error) {
@@ -48,12 +52,20 @@ export function useLocalStorageTodos() {
 
   // Add a new todo
   const addTodo = (text: string, date: string) => {
+    // Get the next order number (highest order + 1)
+    const allTodos = todos;
+    const nextOrder =
+      allTodos.length > 0
+        ? Math.max(...allTodos.map((t) => t.order || 0)) + 1
+        : 0;
+
     const newTodo: Todo = {
       id: crypto.randomUUID(),
       text: text.trim(),
       completed: false,
       createdAt: new Date().toISOString(),
       date: date,
+      order: nextOrder,
     };
 
     setTodos((prev) => [newTodo, ...prev]);
@@ -76,7 +88,9 @@ export function useLocalStorageTodos() {
 
   // Get todos for a specific date
   const getTodosForDate = (date: string) => {
-    return todos.filter((todo) => todo.date === date);
+    return todos
+      .filter((todo) => todo.date === date)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
   };
 
   // Clear all todos
@@ -93,11 +107,17 @@ export function useLocalStorageTodos() {
     return { total, completed, pending };
   };
 
+  // Reorder todos by updating their order values
+  const reorderTodos = (reorderedTodos: Todo[]) => {
+    setTodos(reorderedTodos);
+  };
+
   return {
     todos,
     addTodo,
     toggleTodo,
     deleteTodo,
+    reorderTodos,
     getTodosForDate,
     clearAllTodos,
     getStats,

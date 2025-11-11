@@ -12,10 +12,17 @@ function getCurrentLocalDate(): Date {
 export function TodoApp() {
   const [newTodo, setNewTodo] = useState("");
   const [selectedDate, setSelectedDate] = useState(getCurrentLocalDate());
+  const [draggedTodo, setDraggedTodo] = useState<string | null>(null);
 
   // Use the localStorage hook for persistent todos
-  const { addTodo, toggleTodo, deleteTodo, getTodosForDate, getStats } =
-    useLocalStorageTodos();
+  const {
+    addTodo,
+    toggleTodo,
+    deleteTodo,
+    reorderTodos,
+    getTodosForDate,
+    getStats,
+  } = useLocalStorageTodos();
 
   const formatDateKey = (date: Date) => {
     // Use local date formatting to avoid timezone issues
@@ -48,6 +55,69 @@ export function TodoApp() {
   // Get overall statistics
   const { total, completed, pending } = getStats();
 
+  // Get all todos to use for reordering
+  const { todos: allTodos } = useLocalStorageTodos();
+
+  // Drag and drop handlers
+  const handleDragStart = (e: React.DragEvent, todoId: string) => {
+    setDraggedTodo(todoId);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDrop = (e: React.DragEvent, dropTargetId: string) => {
+    e.preventDefault();
+
+    if (!draggedTodo || draggedTodo === dropTargetId) {
+      setDraggedTodo(null);
+      return;
+    }
+
+    // Get the current todos for the selected date
+    const currentTodos = getTodosForDate(selectedDateKey);
+
+    // Find the dragged and dropped todo indices
+    const draggedIndex = currentTodos.findIndex(
+      (todo) => todo.id === draggedTodo
+    );
+    const dropIndex = currentTodos.findIndex(
+      (todo) => todo.id === dropTargetId
+    );
+
+    if (draggedIndex === -1 || dropIndex === -1) {
+      setDraggedTodo(null);
+      return;
+    }
+
+    // Create a new array with the reordering
+    const reorderedTodos = [...currentTodos];
+    const [movedTodo] = reorderedTodos.splice(draggedIndex, 1);
+    reorderedTodos.splice(dropIndex, 0, movedTodo);
+
+    // Update order values for the affected todos
+    const updatedTodos = reorderedTodos.map((todo, index) => ({
+      ...todo,
+      order: index,
+    }));
+
+    // Update the global todos by replacing the reordered ones
+    const updatedAllTodos = allTodos.map((todo) => {
+      const updatedTodo = updatedTodos.find((ut) => ut.id === todo.id);
+      return updatedTodo || todo;
+    });
+
+    reorderTodos(updatedAllTodos);
+    setDraggedTodo(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedTodo(null);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="max-w-4xl mx-auto w-full px-4 flex-1 flex flex-col">
@@ -73,7 +143,12 @@ export function TodoApp() {
                 {uncompletedTodos.map((todo) => (
                   <div
                     key={todo.id}
-                    className="flex items-center text-[#121212] gap-3 px-3 py-2 rounded-xl transition-colors bg-[#F3EFEE] dbg-gray-700 border-gray-200"
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, todo.id)}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, todo.id)}
+                    onDragEnd={handleDragEnd}
+                    className={`flex items-center text-[#121212] gap-3 px-3 py-2 rounded-xl transition-colors bg-[#F3EFEE] dbg-gray-700 border-gray-200 ${draggedTodo === todo.id ? "opacity-50" : ""}`}
                   >
                     <button
                       onClick={() => toggleTodo(todo.id)}
@@ -85,9 +160,13 @@ export function TodoApp() {
                     </span>
 
                     <button
-                      // onClick={() => deleteTodo(todo.id)}
-                      className="p-1 text-[#d9d9d9] flex rounded transition-colors"
-                      title="Menu"
+                      draggable
+                      onDragStart={(e) => {
+                        e.stopPropagation();
+                        handleDragStart(e, todo.id);
+                      }}
+                      className="p-1 text-[#d9d9d9] flex rounded transition-colors cursor-move"
+                      title="Drag to reorder"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +203,12 @@ export function TodoApp() {
                   {completedTodos.map((todo) => (
                     <div
                       key={todo.id}
-                      className="flex items-center text-[#121212] gap-3 px-3 py-2 rounded-xl transition-colors bg-gray-100 border border-primary-navy/20 text-gray-400 opacity-60"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, todo.id)}
+                      onDragOver={handleDragOver}
+                      onDrop={(e) => handleDrop(e, todo.id)}
+                      onDragEnd={handleDragEnd}
+                      className={`flex items-center text-[#121212] gap-3 px-3 py-2 rounded-xl transition-colors bg-gray-100 border border-primary-navy/20 text-gray-400 opacity-60 ${draggedTodo === todo.id ? "opacity-30" : ""}`}
                     >
                       <button
                         onClick={() => toggleTodo(todo.id)}
@@ -146,9 +230,13 @@ export function TodoApp() {
                       <span className="flex-1 text-gray-500">{todo.text}</span>
 
                       <button
-                        // onClick={() => deleteTodo(todo.id)}
-                        className="p-1 text-[#d9d9d9] flex rounded transition-colors"
-                        title="Menu"
+                        draggable
+                        onDragStart={(e) => {
+                          e.stopPropagation();
+                          handleDragStart(e, todo.id);
+                        }}
+                        className="p-1 text-[#d9d9d9] flex rounded transition-colors cursor-move"
+                        title="Drag to reorder"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
