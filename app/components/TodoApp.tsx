@@ -1,57 +1,37 @@
 import { useState } from "react";
 import { DatePicker } from "./DatePicker";
-
-interface Todo {
-  id: string;
-  text: string;
-  completed: boolean;
-  createdAt: Date;
-  date: string; // YYYY-MM-DD format
-}
+import { useLocalStorageTodos } from "../hooks/useLocalStorageTodosHook";
 
 export function TodoApp() {
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // Use the localStorage hook for persistent todos
+  const { addTodo, toggleTodo, deleteTodo, getTodosForDate, getStats } =
+    useLocalStorageTodos();
 
   const formatDateKey = (date: Date) => {
     return date.toISOString().split("T")[0];
   };
 
-  const addTodo = (e: React.FormEvent) => {
+  const handleAddTodo = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTodo.trim()) return;
 
-    const todo: Todo = {
-      id: crypto.randomUUID(),
-      text: newTodo.trim(),
-      completed: false,
-      createdAt: new Date(),
-      date: formatDateKey(selectedDate),
-    };
-
-    setTodos([todo, ...todos]);
+    const dateKey = formatDateKey(selectedDate);
+    addTodo(newTodo.trim(), dateKey);
     setNewTodo("");
   };
 
-  const toggleTodo = (id: string) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
-  };
-
-  const deleteTodo = (id: string) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
-
-  // Filter todos for the selected date
+  // Get todos for the selected date
   const selectedDateKey = formatDateKey(selectedDate);
-  const filteredTodos = todos.filter((todo) => todo.date === selectedDateKey);
+  const filteredTodos = getTodosForDate(selectedDateKey);
 
   const completedCount = filteredTodos.filter((todo) => todo.completed).length;
   const totalCount = filteredTodos.length;
+
+  // Get overall statistics
+  const { total, completed, pending } = getStats();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
@@ -81,7 +61,7 @@ export function TodoApp() {
           </div>
 
           {/* Add Todo Form */}
-          <form onSubmit={addTodo} className="mb-6">
+          <form onSubmit={handleAddTodo} className="mb-6">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -123,9 +103,9 @@ export function TodoApp() {
               <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                 <p className="text-lg">No todos for this date!</p>
                 <p>Add your first todo above to get started.</p>
-                {todos.length > 0 && (
+                {total > 0 && (
                   <p className="text-sm mt-2">
-                    You have {todos.length} total todos across all dates.
+                    You have {total} total todos across all dates.
                   </p>
                 )}
               </div>
@@ -202,7 +182,7 @@ export function TodoApp() {
           </div>
 
           {/* Total Statistics */}
-          {todos.length > 0 && (
+          {total > 0 && (
             <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                 Overall Statistics
@@ -210,7 +190,7 @@ export function TodoApp() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                   <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {todos.length}
+                    {total}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Total Todos
@@ -218,7 +198,7 @@ export function TodoApp() {
                 </div>
                 <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                   <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {todos.filter((t) => t.completed).length}
+                    {completed}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Completed
@@ -226,7 +206,7 @@ export function TodoApp() {
                 </div>
                 <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                   <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                    {todos.filter((t) => !t.completed).length}
+                    {pending}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Pending
