@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { DatePicker } from "./DatePicker";
-import { useLocalStorageTodos } from "../hooks/useLocalStorageTodosHook";
+import { DatePicker } from "./date-picker";
+import { useLocalStorageTodos } from "../hooks/use-local-storage-todos";
 
 // Helper function to get the current local date
 function getCurrentLocalDate(): Date {
