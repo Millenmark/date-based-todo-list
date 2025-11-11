@@ -176,12 +176,12 @@ export function TodoApp() {
               </div>
             )}
 
-            {/* Empty state */}
+            {/* Empty state
             {filteredTodos.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-gray-500">No todos for this date</p>
               </div>
-            )}
+            )} */}
           </div>
         </main>
 
