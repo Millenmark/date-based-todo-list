@@ -58,25 +58,6 @@ export function TodoApp() {
             onDateSelect={setSelectedDate}
           />
 
-          {/* Add Todo Form */}
-          <form onSubmit={handleAddTodo} className="mb-6">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={newTodo}
-                onChange={(e) => setNewTodo(e.target.value)}
-                placeholder={`Add a todo for ${selectedDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })}...`}
-                className="flex-1 px-4 py-2 border border-gray-300 dborder-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dbg-gray-700 dtext-white"
-              />
-              <button
-                type="submit"
-                className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
-              >
-                Add
-              </button>
-            </div>
-          </form>
-
           {/* Todo List */}
           <div className="space-y-2">
             {filteredTodos.length === 0 ? (
@@ -93,18 +74,18 @@ export function TodoApp() {
               filteredTodos.map((todo) => (
                 <div
                   key={todo.id}
-                  className={`flex items-center gap-3 p-3 rounded-lg border transition-colors ${
+                  className={`flex items-center text-[#121212] gap-3 px-3 py-2 rounded-lg transition-colors ${
                     todo.completed
-                      ? "bg-green-50 dbg-green-900/20 border-green-200 dborder-green-800"
-                      : "bg-white dbg-gray-700 border-gray-200 dborder-gray-600"
+                      ? "bg-green-50 dbg-green-900/20 "
+                      : "bg-[#F3EFEE] dbg-gray-700 border-gray-200"
                   }`}
                 >
                   <button
                     onClick={() => toggleTodo(todo.id)}
                     className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                       todo.completed
-                        ? "bg-green-500 border-green-500"
-                        : "border-gray-300 dborder-gray-500 hover:border-green-400"
+                        ? "bg-primary-navy border-primary-navy"
+                        : "border-[#9f9f9f] rounded-md hover:border-primary-navy hover:cursor-pointer"
                     }`}
                   >
                     {todo.completed && (
@@ -125,34 +106,35 @@ export function TodoApp() {
                   <span
                     className={`flex-1 ${
                       todo.completed
-                        ? "line-through text-gray-500 dtext-gray-400"
+                        ? "line-through text-gray-500"
                         : "text-gray-900 dtext-white"
                     }`}
                   >
                     {todo.text}
                   </span>
 
-                  <span className="text-xs text-gray-400 dtext-gray-500">
-                    {new Date(todo.createdAt).toLocaleTimeString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-
                   <button
-                    onClick={() => deleteTodo(todo.id)}
-                    className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 dhover:bg-red-900/20 rounded transition-colors"
-                    title="Delete todo"
+                    // onClick={() => deleteTodo(todo.id)}
+                    className="p-1 text-[#d9d9d9] flex hover:bg-red-50 dhover:bg-red-900/20 rounded transition-colors"
+                    title="Menu"
                   >
                     <svg
-                      className="w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-6"
                     >
                       <path
-                        fillRule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clipRule="evenodd"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM9 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM9 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM15 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM15 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
                       />
                     </svg>
                   </button>
@@ -160,6 +142,25 @@ export function TodoApp() {
               ))
             )}
           </div>
+
+          {/* Add Todo Form */}
+          <form onSubmit={handleAddTodo} className="my-6">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newTodo}
+                onChange={(e) => setNewTodo(e.target.value)}
+                placeholder="Write a task..."
+                className="flex-1 px-4 py-3 bg-[#F3EFEE] rounded-lg focus:outline-none focus:ring-0 focus:ring-none text-[#222]"
+              />
+              <button
+                type="submit"
+                className="px-6 py-2 cursor-pointer bg-primary-navy text-white rounded-lg font-medium transition-colors"
+              >
+                Add
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
