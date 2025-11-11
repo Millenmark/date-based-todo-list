@@ -58,19 +58,6 @@ export function TodoApp() {
             onDateSelect={setSelectedDate}
           />
 
-          {/* Current Date Display */}
-          <div className="mb-6 text-center">
-            <h2 className="text-xl font-semibold text-gray-700 dtext-gray-300">
-              Todos for{" "}
-              {selectedDate.toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </h2>
-          </div>
-
           {/* Add Todo Form */}
           <form onSubmit={handleAddTodo} className="mb-6">
             <div className="flex gap-2">
@@ -89,24 +76,6 @@ export function TodoApp() {
               </button>
             </div>
           </form>
-
-          {/* Progress Bar */}
-          {totalCount > 0 && (
-            <div className="mb-6">
-              <div className="flex justify-between text-sm text-gray-600 dtext-gray-400 mb-2">
-                <span>
-                  {completedCount} of {totalCount} completed
-                </span>
-                <span>{Math.round((completedCount / totalCount) * 100)}%</span>
-              </div>
-              <div className="w-full bg-gray-200 dbg-gray-700 rounded-full h-2">
-                <div
-                  className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${(completedCount / totalCount) * 100}%` }}
-                />
-              </div>
-            </div>
-          )}
 
           {/* Todo List */}
           <div className="space-y-2">

@@ -69,7 +69,7 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
 
   return (
     <div className="p-4 mb-6">
-      <div className="flex items-center justify-between mb-4">
+      {/* <div className="flex items-center justify-between mb-4">
         <button
           onClick={goToPreviousMonth}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -110,7 +110,7 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
             />
           </svg>
         </button>
-      </div>
+      </div> */}
 
       <div className="flex overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden gap-2 pb-2">
         {days.map((day, index) => {
