@@ -16,3 +16,65 @@ body {
     color-scheme: dark;
   }
 }
+
+/* Custom scrollbar styles for better aesthetics */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-gray-300 {
+  scrollbar-color: #d1d5db transparent;
+}
+
+.scrollbar-track-gray-100 {
+  scrollbar-color: #d1d5db #f3f4f6;
+}
+
+/* Webkit scrollbar styles for Chrome, Safari, and modern browsers */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:active {
+  background: #6b7280;
+}
+
+/* Mobile touch improvements - only hide scrollbar on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .touch-pan-x {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .touch-pan-x::-webkit-scrollbar {
+    display: none; /* Only hide on touch devices */
+  }
+}
+
+/* Smooth scrolling for better mobile experience */
+.overflow-x-auto {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom momentum scrolling for iOS */
+@supports (-webkit-overflow-scrolling: touch) {
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}

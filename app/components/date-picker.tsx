@@ -105,7 +105,9 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
         </button>
       </div> */}
 
-      <div className="flex overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden gap-2.5 pb-2">
+      <div className="flex overflow-x-auto gap-2.5 pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400 transition-colors duration-200 touch-pan-x">
+        {/* Scroll indicator padding on both ends */}
+        <div className="w-2 shrink-0" />
         {days.map((day, index) => {
           if (!day) {
             return <div key={index} className="w-12 h-12 shrink-0" />;
@@ -131,6 +133,8 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
             </button>
           );
         })}
+        {/* Scroll indicator padding on both ends */}
+        <div className="w-2 shrink-0" />
       </div>
     </div>
   );
