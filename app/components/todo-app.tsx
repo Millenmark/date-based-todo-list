@@ -283,6 +283,7 @@ export function TodoApp() {
                 value={newTodo}
                 onChange={(e) => setNewTodo(e.target.value)}
                 placeholder="Write a task..."
+                maxLength={75}
                 className="flex-1 px-4 py-3 bg-[#F3EFEE] rounded-xl focus:outline-none focus:ring-0 focus:ring-none text-[#222]"
               />
               <button
