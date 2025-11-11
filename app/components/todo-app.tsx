@@ -16,6 +16,7 @@ export function TodoApp() {
 
   // Use the localStorage hook for persistent todos
   const {
+    todos: allTodos,
     addTodo,
     toggleTodo,
     deleteTodo,
@@ -54,9 +55,6 @@ export function TodoApp() {
 
   // Get overall statistics
   const { total, completed, pending } = getStats();
-
-  // Get all todos to use for reordering
-  const { todos: allTodos } = useLocalStorageTodos();
 
   // Drag and drop handlers
   const handleDragStart = (e: React.DragEvent, todoId: string) => {
@@ -104,10 +102,14 @@ export function TodoApp() {
       order: index,
     }));
 
-    // Update the global todos by replacing the reordered ones
+    // Update the global todos by only replacing the todos for the current date
     const updatedAllTodos = allTodos.map((todo) => {
-      const updatedTodo = updatedTodos.find((ut) => ut.id === todo.id);
-      return updatedTodo || todo;
+      // Only update todos that belong to the current date
+      if (todo.date === selectedDateKey) {
+        const updatedTodo = updatedTodos.find((ut) => ut.id === todo.id);
+        return updatedTodo || todo;
+      }
+      return todo;
     });
 
     reorderTodos(updatedAllTodos);
