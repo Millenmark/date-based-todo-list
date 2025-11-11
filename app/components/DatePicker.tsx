@@ -5,8 +5,22 @@ interface DatePickerProps {
   onDateSelect: (date: Date) => void;
 }
 
+// Helper function to get the current local date
+function getCurrentLocalDate(): Date {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
+// Helper function to format date as YYYY-MM-DD using local time
+function formatDateKey(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentMonth, setCurrentMonth] = useState(getCurrentLocalDate());
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -31,13 +45,8 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
     return days;
   };
 
-  const formatDateKey = (date: Date) => {
-    return date.toISOString().split("T")[0];
-  };
-
   const isToday = (date: Date) => {
-    const today = new Date();
-    return formatDateKey(date) === formatDateKey(today);
+    return formatDateKey(date) === formatDateKey(getCurrentLocalDate());
   };
 
   const isSelected = (date: Date) => {

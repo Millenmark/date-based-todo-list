@@ -2,16 +2,27 @@ import { useState } from "react";
 import { DatePicker } from "./DatePicker";
 import { useLocalStorageTodos } from "../hooks/useLocalStorageTodosHook";
 
+// Helper function to get the current local date
+function getCurrentLocalDate(): Date {
+  const now = new Date();
+  // Create a date with the local time components
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
 export function TodoApp() {
   const [newTodo, setNewTodo] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(getCurrentLocalDate());
 
   // Use the localStorage hook for persistent todos
   const { addTodo, toggleTodo, deleteTodo, getTodosForDate, getStats } =
     useLocalStorageTodos();
 
   const formatDateKey = (date: Date) => {
-    return date.toISOString().split("T")[0];
+    // Use local date formatting to avoid timezone issues
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   };
 
   const handleAddTodo = (e: React.FormEvent) => {
