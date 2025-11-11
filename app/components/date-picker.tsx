@@ -112,7 +112,7 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
         </button>
       </div> */}
 
-      <div className="flex overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden gap-2 pb-2">
+      <div className="flex overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden gap-2.5 pb-2">
         {days.map((day, index) => {
           if (!day) {
             return <div key={index} className="w-12 h-12 shrink-0" />;
@@ -127,36 +127,14 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
             <button
               key={formatDateKey(day)}
               onClick={() => onDateSelect(day)}
-              className={`w-16 h-16 shrink-0 rounded-lg border-2 transition-all duration-200 flex flex-col items-center justify-center ${
+              className={`w-14 h-16 shrink-0 rounded-lg border-2 transition-all duration-200 flex flex-col items-center justify-center cursor-pointer ${
                 isSelected(day)
-                  ? "border-blue-500 bg-blue-50"
-                  : isToday(day)
-                    ? "border-green-500 bg-green-50"
-                    : "border-gray-200 hover:border-gray-300 dhover:border-gray-500"
+                  ? "border-primary-navy bg-primary-navy text-white"
+                  : "border-gray-200 text-gray-500"
               }`}
             >
-              <span
-                className={`text-xs font-medium ${
-                  isSelected(day)
-                    ? "text-blue-600 "
-                    : isToday(day)
-                      ? "text-green-600"
-                      : "text-gray-50"
-                }`}
-              >
-                {dayOfWeek}
-              </span>
-              <span
-                className={`text-sm font-semibold ${
-                  isSelected(day)
-                    ? "text-blue-700"
-                    : isToday(day)
-                      ? "text-green-700 "
-                      : "text-gray-900"
-                }`}
-              >
-                {dayNumber}
-              </span>
+              <span className="text-xs uppercase">{dayOfWeek}</span>
+              <span className="font-semibold text-base">{dayNumber}</span>
             </button>
           );
         })}
