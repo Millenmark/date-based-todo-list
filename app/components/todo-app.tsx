@@ -45,9 +45,10 @@ export function TodoApp() {
   const { total, completed, pending } = getStats();
 
   return (
-    <div className="min-h-screen py-8 flex items-center justify-center">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className=" p-6">
+    <div className="min-h-screen flex flex-col">
+      <div className="max-w-4xl mx-auto w-full px-4 flex-1 flex flex-col">
+        {/* Header - stays at top */}
+        <header className="flex-shrink-0 py-6">
           <h1 className="text-3xl font-bold text-gray-900 dtext-white mb-6 text-center">
             To Do List
           </h1>
@@ -57,8 +58,10 @@ export function TodoApp() {
             selectedDate={selectedDate}
             onDateSelect={setSelectedDate}
           />
+        </header>
 
-          {/* Todo List */}
+        {/* Todo List - fills remaining space */}
+        <main className="flex-1 overflow-y-auto">
           <div className="space-y-2">
             {filteredTodos.length === 0 ? (
               <div className="text-center py-12 text-gray-500 dtext-gray-400">
@@ -142,9 +145,12 @@ export function TodoApp() {
               ))
             )}
           </div>
+        </main>
 
+        {/* Footer - stays at bottom */}
+        <footer className="flex-shrink-0 py-6">
           {/* Add Todo Form */}
-          <form onSubmit={handleAddTodo} className="my-6">
+          <form onSubmit={handleAddTodo}>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -161,7 +167,7 @@ export function TodoApp() {
               </button>
             </div>
           </form>
-        </div>
+        </footer>
       </div>
     </div>
   );
