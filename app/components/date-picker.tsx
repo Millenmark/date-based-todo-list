@@ -68,14 +68,14 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
   const days = getDaysInMonth(currentMonth);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+    <div className="p-4 mb-6">
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={goToPreviousMonth}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
         >
           <svg
-            className="w-5 h-5 text-gray-600 dark:text-gray-400"
+            className="w-5 h-5 text-gray-600"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -87,7 +87,7 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
           </svg>
         </button>
 
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-lg font-semibold text-gray-900">
           {currentMonth.toLocaleDateString("en-US", {
             month: "long",
             year: "numeric",
@@ -96,10 +96,10 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
 
         <button
           onClick={goToNextMonth}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
         >
           <svg
-            className="w-5 h-5 text-gray-600 dark:text-gray-400"
+            className="w-5 h-5 text-gray-600"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -112,10 +112,10 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
         </button>
       </div>
 
-      <div className="flex overflow-x-auto gap-2 pb-2">
+      <div className="flex overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden gap-2 pb-2">
         {days.map((day, index) => {
           if (!day) {
-            return <div key={index} className="w-12 h-12 flex-shrink-0" />;
+            return <div key={index} className="w-12 h-12 shrink-0" />;
           }
 
           const dayOfWeek = day.toLocaleDateString("en-US", {
@@ -127,21 +127,21 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
             <button
               key={formatDateKey(day)}
               onClick={() => onDateSelect(day)}
-              className={`w-16 h-16 flex-shrink-0 rounded-lg border-2 transition-all duration-200 flex flex-col items-center justify-center ${
+              className={`w-16 h-16 shrink-0 rounded-lg border-2 transition-all duration-200 flex flex-col items-center justify-center ${
                 isSelected(day)
-                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                  ? "border-blue-500 bg-blue-50"
                   : isToday(day)
-                    ? "border-green-500 bg-green-50 dark:bg-green-900/20"
-                    : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                    ? "border-green-500 bg-green-50"
+                    : "border-gray-200 hover:border-gray-300 dhover:border-gray-500"
               }`}
             >
               <span
                 className={`text-xs font-medium ${
                   isSelected(day)
-                    ? "text-blue-600 dark:text-blue-400"
+                    ? "text-blue-600 "
                     : isToday(day)
-                      ? "text-green-600 dark:text-green-400"
-                      : "text-gray-500 dark:text-gray-400"
+                      ? "text-green-600"
+                      : "text-gray-50"
                 }`}
               >
                 {dayOfWeek}
@@ -149,10 +149,10 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
               <span
                 className={`text-sm font-semibold ${
                   isSelected(day)
-                    ? "text-blue-700 dark:text-blue-300"
+                    ? "text-blue-700"
                     : isToday(day)
-                      ? "text-green-700 dark:text-green-300"
-                      : "text-gray-900 dark:text-white"
+                      ? "text-green-700 "
+                      : "text-gray-900"
                 }`}
               >
                 {dayNumber}
