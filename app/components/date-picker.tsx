@@ -25,19 +25,12 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
 
     const days = [];
 
-    // Add empty cells for days before the first day of the month
-    for (let i = 0; i < startingDayOfWeek; i++) {
-      days.push(null);
-    }
-
-    // Add all days of the month
+    // Add all days of the month starting from the left
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
@@ -68,7 +61,7 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
   const days = getDaysInMonth(currentMonth);
 
   return (
-    <div className="p-4 mb-6">
+    <div className=" mb-1">
       {/* <div className="flex items-center justify-between mb-4">
         <button
           onClick={goToPreviousMonth}
