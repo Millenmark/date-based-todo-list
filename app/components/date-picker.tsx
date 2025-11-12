@@ -98,7 +98,6 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
         {days.map((day, index) => {
           const dayOfWeek = day.toLocaleDateString("en-PH", {
             weekday: "short",
-            timeZone: "Asia/Manila",
           });
 
           const dayNumber = day.getDate();

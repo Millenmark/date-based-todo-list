@@ -9,7 +9,7 @@ export function TodoApp() {
   const [draggedTodo, setDraggedTodo] = useState<string | null>(null);
 
   const {
-    todos: allTodos,
+    todos,
     addTodo,
     toggleTodo,
     deleteTodo,
@@ -88,7 +88,7 @@ export function TodoApp() {
     }));
 
     // Update the global todos by only replacing the todos for the current date
-    const updatedAllTodos = allTodos.map((todo) => {
+    const updatedtodos = todos.map((todo) => {
       // Only update todos that belong to the current date
       if (todo.date === selectedDateKey) {
         const updatedTodo = updatedTodos.find((ut) => ut.id === todo.id);
@@ -97,7 +97,7 @@ export function TodoApp() {
       return todo;
     });
 
-    reorderTodos(updatedAllTodos);
+    reorderTodos(updatedtodos);
     setDraggedTodo(null);
   };
 
