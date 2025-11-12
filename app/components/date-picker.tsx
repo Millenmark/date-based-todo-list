@@ -1,22 +1,9 @@
 import { useState } from "react";
+import { getCurrentLocalDate, formatDate } from "~/utils/datefn";
 
 interface DatePickerProps {
   selectedDate: Date;
   onDateSelect: (date: Date) => void;
-}
-
-// Helper function to get the current local date
-function getCurrentLocalDate(): Date {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-}
-
-// Helper function to format date as YYYY-MM-DD using local time
-function formatDateKey(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
 }
 
 export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
@@ -39,11 +26,11 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
   };
 
   const isToday = (date: Date) => {
-    return formatDateKey(date) === formatDateKey(getCurrentLocalDate());
+    return formatDate(date) === formatDate(getCurrentLocalDate());
   };
 
   const isSelected = (date: Date) => {
-    return formatDateKey(date) === formatDateKey(selectedDate);
+    return formatDate(date) === formatDate(selectedDate);
   };
 
   const goToPreviousMonth = () => {
@@ -109,18 +96,16 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
         {/* Scroll indicator padding on both ends */}
         <div className="w-2 shrink-0" />
         {days.map((day, index) => {
-          if (!day) {
-            return <div key={index} className="w-12 h-12 shrink-0" />;
-          }
-
-          const dayOfWeek = day.toLocaleDateString("en-US", {
+          const dayOfWeek = day.toLocaleDateString("en-PH", {
             weekday: "short",
+            timeZone: "Asia/Manila",
           });
+
           const dayNumber = day.getDate();
 
           return (
             <button
-              key={formatDateKey(day)}
+              key={formatDate(day)}
               onClick={() => onDateSelect(day)}
               className={`w-14 h-16 shrink-0 rounded-lg border-2 transition-all duration-200 flex flex-col items-center justify-center cursor-pointer ${
                 isSelected(day)

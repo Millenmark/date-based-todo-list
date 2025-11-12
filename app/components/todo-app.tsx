@@ -1,20 +1,13 @@
 import { useState } from "react";
 import { DatePicker } from "./date-picker";
 import { useLocalStorageTodos } from "../hooks/use-local-storage-todos";
-
-// Helper function to get the current local date
-function getCurrentLocalDate(): Date {
-  const now = new Date();
-  // Create a date with the local time components
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-}
+import { getCurrentLocalDate, formatDate } from "~/utils/datefn";
 
 export function TodoApp() {
   const [newTodo, setNewTodo] = useState("");
   const [selectedDate, setSelectedDate] = useState(getCurrentLocalDate());
   const [draggedTodo, setDraggedTodo] = useState<string | null>(null);
 
-  // Use the localStorage hook for persistent todos
   const {
     todos: allTodos,
     addTodo,
@@ -25,25 +18,17 @@ export function TodoApp() {
     getStats,
   } = useLocalStorageTodos();
 
-  const formatDateKey = (date: Date) => {
-    // Use local date formatting to avoid timezone issues
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
   const handleAddTodo = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTodo.trim()) return;
 
-    const dateKey = formatDateKey(selectedDate);
+    const dateKey = formatDate(selectedDate);
     addTodo(newTodo.trim(), dateKey);
     setNewTodo("");
   };
 
   // Get todos for the selected date
-  const selectedDateKey = formatDateKey(selectedDate);
+  const selectedDateKey = formatDate(selectedDate);
   const filteredTodos = getTodosForDate(selectedDateKey);
 
   // Separate completed and uncompleted todos
@@ -123,23 +108,19 @@ export function TodoApp() {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="max-w-4xl mx-auto w-full px-4 flex-1 flex flex-col">
-        {/* Header - stays at top */}
         <header className="flex-shrink-0 pt-12 py-6">
           <h1 className="pl-3 text-3xl font-bold text-gray-900 dtext-white mb-6">
             To Do List
           </h1>
 
-          {/* Date Picker */}
           <DatePicker
             selectedDate={selectedDate}
             onDateSelect={setSelectedDate}
           />
         </header>
 
-        {/* Todo List - fills remaining space */}
         <main className="flex-1 overflow-y-auto">
           <div className="space-y-2">
-            {/* Uncompleted Todos Section */}
             {uncompletedTodos.length > 0 && (
               <>
                 {uncompletedTodos.map((todo) => (
@@ -195,7 +176,6 @@ export function TodoApp() {
               </>
             )}
 
-            {/* Completed Todos Section */}
             {completedTodos.length > 0 && (
               <div className="mt-8">
                 <h2 className="pl-3 text-xs font-semibold uppercase text-primary-navy mb-3">
@@ -275,9 +255,7 @@ export function TodoApp() {
           </div>
         </main>
 
-        {/* Footer - stays at bottom */}
         <footer className="flex-shrink-0 py-6">
-          {/* Add Todo Form */}
           <form onSubmit={handleAddTodo}>
             <div className="flex gap-2">
               <input
